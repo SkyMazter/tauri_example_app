@@ -12,11 +12,14 @@ import {
   BsMoonStarsFill,
   BsMoonStars,
 } from "react-icons/bs";
+import Chats from "./components/Chats";
 
 function App() {
   const [isDark, setIsDark] = useState(false);
 
   const [show, setShow] = useState(false);
+
+  const user_name: string = "User_Name";
 
   function handleToggle() {
     if (isDark == true) setIsDark(false);
@@ -42,7 +45,6 @@ function App() {
     >
       <Row>
         <Col xs={2} className="d-flex justify-content-start align-items-center">
-          {" "}
           {isDark ? (
             <BsMoonStarsFill className="bttn" onClick={handleToggle} />
           ) : (
@@ -50,12 +52,15 @@ function App() {
           )}
         </Col>
         <Col className="d-flex justify-content-center">
-          {" "}
-          <h1>Example App</h1>{" "}
+          <h2>Chat</h2>
         </Col>
         <Col xs={2} className="d-flex justify-content-end align-items-center">
           <BsThreeDotsVertical className="bttn" onClick={handleShow} />
         </Col>
+      </Row>
+
+      <Row>
+        <Chats />
       </Row>
 
       <Offcanvas
@@ -70,7 +75,7 @@ function App() {
       >
         <Offcanvas.Header closeButton>
           <Offcanvas.Title>
-            <h3>Menu</h3>
+            <h3>Logged in as: {user_name}</h3>
           </Offcanvas.Title>
         </Offcanvas.Header>
         <Offcanvas.Body>

@@ -57,3 +57,14 @@ body {
 .menu-bttn:hover {
     border-bottom: 1px black solid;
 }
+
+.chat-box {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-top: 1px solid;
+}
+
+.latest-message {
+    overflow: hidden;
+}
