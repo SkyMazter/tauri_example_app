@@ -11,9 +11,7 @@ interface Props {
 const Chat_Box = ({ name, latest_message }: Props) => {
   return (
     <Row>
-      {" "}
       <Col className="chat-box">
-        {" "}
         <div className="py-1">
           <h6> {name} </h6> <p className="latest-message"> {latest_message}</p>
         </div>
