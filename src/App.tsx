@@ -12,7 +12,7 @@ import {
   BsMoonStarsFill,
   BsMoonStars,
 } from "react-icons/bs";
-import Chats from "./components/Chats";
+// import Chats from "./components/Chats";
 
 function App() {
   const [isDark, setIsDark] = useState(false);
@@ -59,10 +59,13 @@ function App() {
         </Col>
       </Row>
 
-      <Row>
+      {/* <Row>
         <Chats />
-      </Row>
+      </Row> */}
 
+      <Row>
+        <Col></Col>
+      </Row>
       <Offcanvas
         className="quicksand"
         show={show}
