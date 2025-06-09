@@ -59,10 +59,6 @@ function App() {
         </Col>
       </Row>
 
-      {/* <Row>
-        <Chats />
-      </Row> */}
-
       <Row>
         <Col></Col>
       </Row>
