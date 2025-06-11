@@ -7,6 +7,8 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Offcanvas from "react-bootstrap/Offcanvas";
 
+import { invoke } from "@tauri-apps/api/core";
+
 import {
   BsThreeDotsVertical,
   BsMoonStarsFill,
@@ -29,6 +31,14 @@ function App() {
   const handleShow = () => {
     if (show == true) setShow(false);
     else setShow(true);
+  };
+
+  const sendMessage = async (msg: string) => {
+    await invoke("send_message", { msg });
+  };
+
+  const handleSend = () => {
+    sendMessage("Hi Hello Hey");
   };
 
   return (
@@ -60,7 +70,10 @@ function App() {
       </Row>
 
       <Row>
-        <Col></Col>
+        <Col>
+          {" "}
+          <button onClick={handleSend}>Send Message</button>
+        </Col>
       </Row>
       <Offcanvas
         className="quicksand"

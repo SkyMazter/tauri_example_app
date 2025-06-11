@@ -1,8 +1,12 @@
 use futures::{SinkExt, StreamExt};
-// use tokio::sync::mpsc;
+use once_cell::sync::OnceCell;
+use tokio::sync::mpsc;
+use tokio::sync::mpsc::UnboundedSender;
 use tokio_tungstenite::connect_async;
 use tokio_tungstenite::tungstenite::Message;
 use tungstenite::client::IntoClientRequest;
+
+pub static WS_TX: OnceCell<UnboundedSender<Message>> = OnceCell::new();
 
 pub async fn run_ws_client() {
     let url = "ws://localhost:9001".into_client_request().unwrap();
@@ -18,15 +22,29 @@ pub async fn run_ws_client() {
 
     let (mut ws_sender, mut ws_reciever) = stream.split();
 
-    // let (tx, mut rx) = mpsc::unbounded_channel::<Message>();
+    let (tx, mut rx) = mpsc::unbounded_channel::<Message>();
+    WS_TX.set(tx).unwrap();
+    // Spawn task to receive messages from server
+    let recv_task = tokio::spawn(async move {
+        while let Some(Ok(response)) = ws_reciever.next().await {
+            println!("Received from server: {}", response);
+        }
+    });
 
-    let message = Message::from("DeezNuts");
+    // Spawn task to send messages to server
+    let send_task = tokio::spawn(async move {
+        while let Some(msg) = rx.recv().await {
+            if let Ok(text) = msg.into_text() {
+                if ws_sender.send(Message::Text(text)).await.is_err() {
+                    eprintln!("WebSocket send failed.");
+                    break;
+                }
+            } else {
+                eprintln!("Received non-text message, skipping.");
+            }
+        }
+    });
 
-    if let Err(e) = ws_sender.send(message).await {
-        eprintln!("Error sending message: {:?}", e);
-    }
-
-    if let Some(Ok(response)) = ws_reciever.next().await {
-        println!("Response: {}", response)
-    }
+    // Await both tasks to complete
+    let _ = tokio::join!(recv_task, send_task);
 }
